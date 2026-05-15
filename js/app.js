@@ -255,9 +255,17 @@ function handleLoopComplete(loopNum) {
   if (state.phase2Active) {
     timingEval.flushAll();
     const score = timingEval.getScore();
-    if (score.total > 0) showAccuracyModal(score);
+    if (score.total > 0) {
+      if (state.isLooping) {
+        // Keep the beat going — just toast the score, verdicts stay on grid
+        const pct = Math.round((score.hits / score.total) * 100);
+        showToast(`🎤 Loop: ${pct}% — ${score.perfect}🟢 ${score.close}🟡 ${score.misses}🔴`);
+        setTimeout(clearCellVerdicts, 600);
+      } else {
+        showAccuracyModal(score);
+      }
+    }
     timingEval.reset();
-    clearCellVerdicts();
   }
 
   // Practice mode: ramp BPM
@@ -292,7 +300,11 @@ function startPlayback() {
 function stopPlayback() {
   state.isPlaying = false;
   metronome.stop();
-  timingEval.flushAll();
+  if (state.phase2Active) {
+    timingEval.flushAll();
+    const score = timingEval.getScore();
+    if (score.total > 0) showAccuracyModal(score);
+  }
   timingEval.reset();
   setPlayingUI(false);
 }
@@ -432,9 +444,12 @@ function setBpm(bpm) {
 // ── Rewards UI ────────────────────────────────────────────────────────────────
 
 function grantReward(patternId, stars, isPracticeDone) {
-  const { earnedBadges } = rewards.awardStars(patternId, stars, { practiceDone: isPracticeDone });
+  const prevStars = rewards.getStars(patternId);
+  const { newStars, earnedBadges } = rewards.awardStars(patternId, stars, { practiceDone: isPracticeDone });
   updateStarCount(); renderPatternList(); updatePatternInfo(state.pattern); renderBadges();
-  showRewardModal(stars, earnedBadges);
+  if (newStars > prevStars || earnedBadges.length > 0) {
+    showRewardModal(newStars, earnedBadges);
+  }
 }
 
 function showRewardModal(stars, earnedBadges) {
