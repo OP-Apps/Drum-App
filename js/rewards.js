@@ -67,37 +67,27 @@ class RewardSystem {
     this.progress = this._load();
   }
 
-  // ── Persistence ──────────────────────────────────────────────────────────
-
   _load() {
     try {
       const raw = localStorage.getItem(this._storageKey);
       if (raw) return JSON.parse(raw);
-    } catch (_) { /* ignore parse errors */ }
+    } catch (_) {}
     return { patterns: {}, badges: [], totalStars: 0 };
   }
 
   _save() {
     try {
       localStorage.setItem(this._storageKey, JSON.stringify(this.progress));
-    } catch (_) { /* ignore storage errors (private browsing etc.) */ }
+    } catch (_) {}
   }
 
-  // ── Stars ────────────────────────────────────────────────────────────────
-
-  /** Returns how many stars (0-3) a pattern currently has. */
   getStars(patternId) {
     return this.progress.patterns[patternId]?.stars ?? 0;
   }
 
-  /**
-   * Award stars to a pattern.  Only upgrades — never reduces.
-   * Returns {newStars, earnedBadges} so the UI can react.
-   */
   awardStars(patternId, stars, options = {}) {
     const current = this.getStars(patternId);
     if (stars <= current) return { newStars: current, earnedBadges: [] };
-
     const gained = stars - current;
     if (!this.progress.patterns[patternId]) {
       this.progress.patterns[patternId] = {};
@@ -108,7 +98,6 @@ class RewardSystem {
     }
     this.progress.totalStars = (this.progress.totalStars || 0) + gained;
     this._save();
-
     const earnedBadges = this._checkBadges();
     return { newStars: stars, earnedBadges };
   }
@@ -117,13 +106,10 @@ class RewardSystem {
     return this.progress.totalStars || 0;
   }
 
-  // ── Badges ───────────────────────────────────────────────────────────────
-
-  /** Check all badge conditions; returns any newly earned badge objects. */
   _checkBadges() {
     const earned = [];
     for (const badge of BADGES) {
-      if (this.progress.badges.includes(badge.id)) continue; // already have it
+      if (this.progress.badges.includes(badge.id)) continue;
       if (badge.condition(this.progress)) {
         this.progress.badges.push(badge.id);
         earned.push(badge);
@@ -137,14 +123,10 @@ class RewardSystem {
     return this.progress.badges.includes(badgeId);
   }
 
-  /** All badge definitions, annotated with whether the player has them. */
   getAllBadges() {
     return BADGES.map(b => ({ ...b, earned: this.hasBadge(b.id) }));
   }
 
-  // ── Dev / debug ──────────────────────────────────────────────────────────
-
-  /** Wipe all saved progress — handy during testing. */
   reset() {
     this.progress = { patterns: {}, badges: [], totalStars: 0 };
     this._save();

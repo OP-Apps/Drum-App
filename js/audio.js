@@ -10,13 +10,9 @@ class AudioEngine {
   constructor() {
     this.context = null;
     this.masterGain = null;
-    this._noiseBuffer = null; // Shared white-noise buffer
+    this._noiseBuffer = null;
   }
 
-  /**
-   * Call this once on the first user click/touch.
-   * Safe to call multiple times.
-   */
   init() {
     if (this.context) return;
     this.context = new (window.AudioContext || window.webkitAudioContext)();
@@ -26,16 +22,12 @@ class AudioEngine {
     this._noiseBuffer = this._buildNoiseBuffer();
   }
 
-  /** Resume context if browser suspended it (e.g. after page focus change). */
   resume() {
     if (this.context && this.context.state === 'suspended') {
       this.context.resume();
     }
   }
 
-  // ── Private helpers ───────────────────────────────────────────────────────
-
-  /** Build a 0.5-second buffer of white noise, reused by all noise sounds. */
   _buildNoiseBuffer() {
     const seconds = 0.5;
     const buf = this.context.createBuffer(
@@ -48,7 +40,6 @@ class AudioEngine {
     return buf;
   }
 
-  /** Convenience: make an oscillator → gain → master chain. */
   _osc(type, freq, startTime, gainPeak, gainDecayEnd, decayDuration) {
     const ctx = this.context;
     const osc = ctx.createOscillator();
@@ -63,21 +54,17 @@ class AudioEngine {
     osc.stop(startTime + decayDuration + 0.01);
   }
 
-  /** Convenience: noise burst through a filter → gain → master chain. */
   _noise(filterType, filterFreq, filterQ, startTime, gainPeak, decayDuration) {
     const ctx = this.context;
     const noise = ctx.createBufferSource();
     noise.buffer = this._noiseBuffer;
-
     const filter = ctx.createBiquadFilter();
     filter.type = filterType;
     filter.frequency.value = filterFreq;
     if (filterQ !== null) filter.Q.value = filterQ;
-
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(gainPeak, startTime);
     gain.gain.exponentialRampToValueAtTime(0.0001, startTime + decayDuration);
-
     noise.connect(filter);
     filter.connect(gain);
     gain.connect(this.masterGain);
@@ -85,12 +72,8 @@ class AudioEngine {
     noise.stop(startTime + decayDuration + 0.01);
   }
 
-  // ── Drum sounds ───────────────────────────────────────────────────────────
-
   playKick(time) {
     const ctx = this.context;
-
-    // Main body: sine swept from 150 Hz → 50 Hz
     const osc = ctx.createOscillator();
     const oscGain = ctx.createGain();
     osc.type = 'sine';
@@ -102,15 +85,11 @@ class AudioEngine {
     oscGain.connect(this.masterGain);
     osc.start(time);
     osc.stop(time + 0.51);
-
-    // Transient click (low-passed noise for attack punch)
     this._noise('lowpass', 200, null, time, 0.6, 0.06);
   }
 
   playSnare(time) {
-    // Wire buzz: bandpass noise
     this._noise('bandpass', 2000, 0.8, time, 1.0, 0.22);
-    // Body: triangle oscillator
     this._osc('triangle', 185, time, 0.6, 0, 0.12);
   }
 
@@ -123,7 +102,6 @@ class AudioEngine {
     const ctx = this.context;
     const startFreq = { high: 250, mid: 130, low: 85 }[pitch];
     const endFreq   = { high: 130, mid:  70, low: 45 }[pitch];
-
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'sine';
@@ -142,30 +120,21 @@ class AudioEngine {
     this._noise('bandpass', 9000, 0.5, time, 0.3, 1.2);
   }
 
-  /**
-   * Metronome click.
-   * @param {number} time - AudioContext scheduled time
-   * @param {boolean} isDownbeat - beat 1 gets a higher, louder click
-   */
   playClick(time, isDownbeat = false) {
     const freq = isDownbeat ? 1400 : 900;
     const vol  = isDownbeat ? 0.45 : 0.25;
     this._osc('sine', freq, time, vol, 0, 0.04);
   }
 
-  /**
-   * Dispatch to the right synthesizer by instrument name.
-   * Names match the keys used in PATTERNS.
-   */
   playInstrument(name, time) {
     if (!this.context) return;
     switch (name) {
-      case 'kick':     this.playKick(time);         break;
-      case 'snare':    this.playSnare(time);         break;
-      case 'hihat':    this.playHihat(time, false);  break;
-      case 'openHihat':this.playHihat(time, true);   break;
-      case 'tom':      this.playTom(time, 'mid');    break;
-      case 'crash':    this.playCrash(time);         break;
+      case 'kick':      this.playKick(time);         break;
+      case 'snare':     this.playSnare(time);         break;
+      case 'hihat':     this.playHihat(time, false);  break;
+      case 'openHihat': this.playHihat(time, true);   break;
+      case 'tom':       this.playTom(time, 'mid');    break;
+      case 'crash':     this.playCrash(time);         break;
     }
   }
 }

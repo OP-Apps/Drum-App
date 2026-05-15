@@ -71,7 +71,6 @@ const PATTERNS = [
     songEmoji: '👑',
     tip: 'Stomp stomp CLAP! Two kicks then a snare. The whole world knows this beat!',
     instruments: {
-      // Step 0 = STOMP, step 2 = STOMP, step 4 = CLAP
       kick:  [1,0,1,0, 0,0,0,0, 1,0,1,0, 0,0,0,0],
       snare: [0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0],
     },
@@ -89,7 +88,6 @@ const PATTERNS = [
     songEmoji: '🍎',
     tip: 'The Beatles classic! The kick moves a tiny bit — feel the groove!',
     instruments: {
-      // Slightly syncopated kick inspired by the original groove
       kick:  [1,0,0,1, 0,0,0,0, 1,0,0,1, 0,0,0,0],
       snare: [0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0],
       hihat: [1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,0],
@@ -126,7 +124,6 @@ const PATTERNS = [
     instruments: {
       kick:  [1,0,0,0, 0,0,0,0, 1,0,0,0, 0,0,0,0],
       snare: [0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0],
-      // 16th-note hi-hat — every step
       hihat: [1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1],
     },
   },
@@ -186,7 +183,6 @@ const PATTERNS = [
 
 ];
 
-// Instrument display metadata (order matters — top to bottom in grid)
 const INSTRUMENT_META = {
   crash: { label: 'Crash',  emoji: '💥', color: '#c56ef3' },
   hihat: { label: 'Hi-Hat', emoji: '🎵', color: '#ffd93d' },
@@ -195,5 +191,4 @@ const INSTRUMENT_META = {
   kick:  { label: 'Kick',   emoji: '🥁', color: '#ff6b6b' },
 };
 
-// Display order for rendering (top = highest pitched)
 const INSTRUMENT_ORDER = ['crash', 'hihat', 'tom', 'snare', 'kick'];
