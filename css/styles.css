@@ -1,28 +1,34 @@
-/* ── Google Fonts ──────────────────────────────────────────────────────── */
+/* ── Google Fonts ──────────────────────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
 
+/* ── CSS Variables ─────────────────────────────────────────────────────────── */
 :root {
   --bg:          #0d0d1a;
   --bg-card:     #16162a;
   --bg-panel:    #1e1e36;
   --bg-control:  #252545;
+
   --pink:        #ff4d8d;
   --orange:      #ff8c42;
   --yellow:      #ffd93d;
   --teal:        #4ecdc4;
   --purple:      #a855f7;
   --green:       #22c55e;
+
   --text:        #f0f0ff;
   --text-muted:  #8888aa;
+
   --radius-sm:   8px;
   --radius-md:   14px;
   --radius-lg:   20px;
   --radius-xl:   28px;
+
   --shadow:      0 4px 24px rgba(0,0,0,0.5);
   --glow-pink:   0 0 16px rgba(255,77,141,0.6);
   --glow-yellow: 0 0 16px rgba(255,217,61,0.7);
 }
 
+/* ── Reset & Base ──────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -33,6 +39,7 @@ body {
   overflow-x: hidden;
 }
 
+/* Subtle animated star-field background */
 body::before {
   content: '';
   position: fixed;
@@ -44,6 +51,7 @@ body::before {
   z-index: 0;
 }
 
+/* ── Header ────────────────────────────────────────────────────────────────── */
 .app-header {
   display: flex;
   align-items: center;
@@ -87,15 +95,18 @@ body::before {
   justify-content: center;
 }
 
+/* ── Main layout ───────────────────────────────────────────────────────────── */
 .app-body {
   display: grid;
   grid-template-columns: 280px 1fr;
+  grid-template-rows: auto 1fr auto;
   gap: 0;
   min-height: calc(100vh - 72px);
   position: relative;
   z-index: 1;
 }
 
+/* ── Sidebar ───────────────────────────────────────────────────────────────── */
 .sidebar {
   background: var(--bg-card);
   border-right: 2px solid rgba(255,255,255,0.06);
@@ -119,6 +130,7 @@ body::before {
   margin-bottom: 10px;
 }
 
+/* Level filter buttons */
 .level-filters {
   display: flex;
   flex-wrap: wrap;
@@ -150,6 +162,7 @@ body::before {
   box-shadow: var(--glow-pink);
 }
 
+/* Pattern list */
 .pattern-list {
   flex: 1;
   overflow-y: auto;
@@ -224,6 +237,7 @@ body::before {
   margin-top: 2px;
 }
 
+/* ── Main content area ─────────────────────────────────────────────────────── */
 .main-content {
   display: flex;
   flex-direction: column;
@@ -231,6 +245,7 @@ body::before {
   overflow: hidden;
 }
 
+/* ── Pattern info ──────────────────────────────────────────────────────────── */
 .pattern-info {
   padding: 18px 24px 14px;
   background: var(--bg-panel);
@@ -272,7 +287,9 @@ body::before {
   gap: 4px;
 }
 
-.pattern-earned-stars { font-size: 1.2rem; }
+.pattern-earned-stars {
+  font-size: 1.2rem;
+}
 
 .target-bpm-label {
   font-size: 0.75rem;
@@ -283,6 +300,7 @@ body::before {
   font-weight: 700;
 }
 
+/* ── Drum grid ─────────────────────────────────────────────────────────────── */
 .grid-wrapper {
   flex: 1;
   overflow-x: auto;
@@ -301,6 +319,11 @@ body::before {
   min-width: 600px;
 }
 
+/* Step number labels at top */
+.grid-corner {
+  /* empty top-left cell */
+}
+
 .step-label {
   text-align: center;
   font-size: 0.7rem;
@@ -315,8 +338,11 @@ body::before {
   color: rgba(255,255,255,0.5);
 }
 
-.step-label.current-step { color: var(--yellow) !important; }
+.step-label.current-step {
+  color: var(--yellow) !important;
+}
 
+/* Row labels */
 .row-label {
   display: flex;
   align-items: center;
@@ -338,6 +364,7 @@ body::before {
   letter-spacing: 0.5px;
 }
 
+/* Individual step cells */
 .grid-cell {
   width: 100%;
   aspect-ratio: 1;
@@ -351,8 +378,11 @@ body::before {
   overflow: hidden;
 }
 
-.grid-cell.alt-beat { background: rgba(255,255,255,0.02); }
+.grid-cell.alt-beat {
+  background: rgba(255,255,255,0.02);
+}
 
+/* Cell with a drum note */
 .grid-cell.has-note {
   background: var(--note-color, #ff6b6b);
   border-color: transparent;
@@ -367,19 +397,24 @@ body::before {
   background: rgba(255,255,255,0.3);
 }
 
+/* Active step column — ghost highlight on empty cells */
 .grid-cell.current-step:not(.has-note) {
   background: rgba(255,255,255,0.12);
   border-color: rgba(255,255,255,0.2);
 }
 
+/* Drum hit animation */
 @keyframes hitPulse {
   0%   { transform: scale(1);    filter: brightness(1); }
   30%  { transform: scale(1.35); filter: brightness(1.9); }
   100% { transform: scale(1);    filter: brightness(1); }
 }
 
-.grid-cell.hitting { animation: hitPulse 0.18s ease-out forwards; }
+.grid-cell.hitting {
+  animation: hitPulse 0.18s ease-out forwards;
+}
 
+/* ── Controls panel ────────────────────────────────────────────────────────── */
 .controls-panel {
   background: var(--bg-panel);
   border-top: 2px solid rgba(255,255,255,0.07);
@@ -389,6 +424,7 @@ body::before {
   gap: 16px;
 }
 
+/* BPM row */
 .bpm-row {
   display: flex;
   align-items: center;
@@ -413,6 +449,7 @@ body::before {
 
 .bpm-hint { font-size: 1.4rem; }
 
+/* Range slider — cross-browser */
 #bpm-slider {
   flex: 1;
   min-width: 140px;
@@ -451,6 +488,7 @@ body::before {
 #bpm-slider:disabled { opacity: 0.5; cursor: not-allowed; }
 #bpm-slider:disabled::-webkit-slider-thumb { cursor: not-allowed; }
 
+/* Transport buttons row */
 .transport-row {
   display: flex;
   gap: 12px;
@@ -458,6 +496,7 @@ body::before {
   align-items: center;
 }
 
+/* ── Big buttons ───────────────────────────────────────────────────────────── */
 .big-btn {
   font-family: 'Fredoka One', cursive;
   font-size: 1.1rem;
@@ -474,6 +513,7 @@ body::before {
 .big-btn:active { transform: scale(0.95); }
 .big-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; filter: none; }
 
+/* Play button */
 #play-btn {
   background: linear-gradient(135deg, var(--green), #16a34a);
   color: #fff;
@@ -487,6 +527,7 @@ body::before {
   box-shadow: 0 4px 20px rgba(245,158,11,0.4);
 }
 
+/* Loop button */
 #loop-btn {
   background: var(--bg-control);
   color: var(--text-muted);
@@ -499,12 +540,14 @@ body::before {
   box-shadow: 0 0 12px rgba(78,205,196,0.3);
 }
 
+/* Practice button */
 #practice-btn {
   background: linear-gradient(135deg, #7c3aed, #5b21b6);
   color: #fff;
   box-shadow: 0 4px 20px rgba(124,58,237,0.4);
 }
 
+/* ── Badges section ────────────────────────────────────────────────────────── */
 .badges-section {
   padding: 16px;
   border-top: 1px solid rgba(255,255,255,0.07);
@@ -552,6 +595,7 @@ body::before {
 .badge-emoji { font-size: 1.1rem; }
 .badge-label { font-size: 0.75rem; }
 
+/* ── Count-in overlay ──────────────────────────────────────────────────────── */
 #count-overlay {
   position: fixed;
   inset: 0;
@@ -584,6 +628,7 @@ body::before {
   animation: countPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
+/* ── Reward modal ──────────────────────────────────────────────────────────── */
 #reward-modal {
   position: fixed;
   inset: 0;
@@ -610,6 +655,7 @@ body::before {
   overflow: hidden;
 }
 
+/* Sparkle top bar */
 .reward-content::before {
   content: '';
   position: absolute;
@@ -644,7 +690,10 @@ body::before {
   margin-bottom: 20px;
 }
 
-#reward-badges { margin-bottom: 20px; }
+#reward-badges {
+  margin-bottom: 20px;
+}
+
 #reward-badges.hidden { display: none; }
 
 .new-badge {
@@ -665,6 +714,7 @@ body::before {
   font-size: 1.2rem;
 }
 
+/* ── Toast ─────────────────────────────────────────────────────────────────── */
 #toast {
   position: fixed;
   bottom: 24px;
@@ -683,19 +733,23 @@ body::before {
 }
 
 #toast.hidden { display: none; }
+
 #toast.fade-out { opacity: 0; }
 
+/* ── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .app-body {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto 1fr auto;
   }
+
   .sidebar {
     grid-row: auto;
     border-right: none;
     border-bottom: 2px solid rgba(255,255,255,0.06);
     max-height: 220px;
   }
+
   .pattern-list {
     flex-direction: row;
     overflow-x: auto;
@@ -703,18 +757,210 @@ body::before {
     flex-wrap: nowrap;
     padding: 10px;
   }
-  .pattern-card { min-width: 160px; flex-shrink: 0; }
+
+  .pattern-card {
+    min-width: 160px;
+    flex-shrink: 0;
+  }
+
   .badges-section { max-height: 150px; }
+
   .controls-panel { padding: 14px 16px; }
+
   .bpm-row { flex-wrap: nowrap; }
+
   .big-btn { padding: 12px 18px; font-size: 1rem; }
 }
 
 @media (max-width: 480px) {
   .app-header { padding: 12px 16px; }
   .app-title { font-size: 1.4rem; }
+
   .grid-wrapper { padding: 12px 12px; }
+
   .grid-cell { min-width: 24px; min-height: 24px; }
+
   .transport-row { gap: 8px; }
   .big-btn { padding: 10px 14px; font-size: 0.9rem; }
+}
+
+/* ── Phase 2 — grid cell verdict colours ───────────────────────────────────── */
+
+@keyframes verdictPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* Perfect hit — bright green */
+.grid-cell.cell-perfect {
+  background: #22c55e !important;
+  box-shadow: 0 0 12px rgba(34,197,94,0.8) !important;
+  animation: verdictPop 0.25s ease-out;
+}
+
+/* Close hit — warm yellow */
+.grid-cell.cell-close {
+  background: #fbbf24 !important;
+  box-shadow: 0 0 12px rgba(251,191,36,0.8) !important;
+  animation: verdictPop 0.25s ease-out;
+}
+
+/* Missed — muted red */
+.grid-cell.cell-miss {
+  background: #ef4444 !important;
+  box-shadow: 0 0 8px rgba(239,68,68,0.5) !important;
+}
+
+/* ── Phase 2 — Play Along button ───────────────────────────────────────────── */
+
+.phase2-btn {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(14,165,233,0.4);
+}
+
+.phase2-btn.phase2-on {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 4px 20px rgba(16,185,129,0.5);
+  animation: micPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes micPulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(16,185,129,0.5); }
+  50%       { box-shadow: 0 4px 32px rgba(16,185,129,0.9); }
+}
+
+/* ── Phase 2 — mic panel ───────────────────────────────────────────────────── */
+
+.mic-panel {
+  background: rgba(14,165,233,0.08);
+  border: 1px solid rgba(14,165,233,0.25);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mic-panel.hidden { display: none; }
+
+.mic-panel-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mic-label {
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: #38bdf8;
+  white-space: nowrap;
+}
+
+.mic-tip {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  flex: 1;
+}
+
+.mic-meter {
+  width: 140px;
+  height: 14px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 7px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.mic-bar {
+  height: 100%;
+  width: 0%;
+  background: #4ecdc4;
+  border-radius: 7px;
+  transition: width 0.05s linear, background 0.1s;
+}
+
+/* ── Phase 2 — accuracy modal ──────────────────────────────────────────────── */
+
+#accuracy-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,10,25,0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 210;
+  backdrop-filter: blur(6px);
+}
+
+#accuracy-modal.hidden { display: none; }
+
+.accuracy-content {
+  background: var(--bg-card);
+  border: 2px solid rgba(34,197,94,0.35);
+  border-radius: var(--radius-xl);
+  padding: 36px 44px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(34,197,94,0.12), var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.accuracy-content::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #22c55e, #fbbf24, #ef4444);
+}
+
+.acc-emoji {
+  font-size: 3rem;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.acc-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.7rem;
+  color: var(--yellow);
+  margin-bottom: 10px;
+}
+
+.acc-pct {
+  font-family: 'Fredoka One', cursive;
+  font-size: 3.5rem;
+  color: #22c55e;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.acc-score {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+.acc-breakdown {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.acc-close-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  width: 100%;
+  font-size: 1.15rem;
+  box-shadow: 0 4px 20px rgba(34,197,94,0.4);
 }

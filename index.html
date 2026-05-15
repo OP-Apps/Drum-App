@@ -66,6 +66,12 @@
 
       <!-- Drum grid -->
       <div class="grid-wrapper">
+        <!--
+          Grid is built dynamically by renderDrumGrid() in app.js.
+          Rows = instruments (crash → kick, top to bottom).
+          Columns = 16 steps (16th notes in a 4/4 bar).
+          Beat 1 = col 0, Beat 2 = col 4, Beat 3 = col 8, Beat 4 = col 12.
+        -->
         <div id="drum-grid"></div>
       </div>
 
@@ -93,6 +99,24 @@
           <button id="play-btn"     class="big-btn">▶ PLAY!</button>
           <button id="loop-btn"     class="big-btn active">↺ Loop: ON</button>
           <button id="practice-btn" class="big-btn">🐢 Practice Mode</button>
+          <button id="phase2-btn"   class="big-btn phase2-btn">🎤 Play Along!</button>
+        </div>
+
+        <!-- Phase 2 mic panel (hidden until mic is active) -->
+        <div id="mic-panel" class="mic-panel hidden">
+          <div class="mic-panel-row">
+            <span class="mic-label">🎤 Mic level:</span>
+            <div class="mic-meter">
+              <div id="mic-bar" class="mic-bar"></div>
+            </div>
+            <span class="mic-tip">Hit your drum and watch it light up!</span>
+          </div>
+          <div class="mic-panel-row">
+            <span class="mic-label">Sensitivity:</span>
+            <input type="range" id="sensitivity-slider" min="1" max="10" value="5"
+                   style="flex:1; max-width:160px;" aria-label="Mic sensitivity">
+            <span class="mic-tip">Turn up if it misses hits · Turn down if it triggers too easily</span>
+          </div>
         </div>
 
       </div>
@@ -117,6 +141,22 @@
     </div>
   </div>
 
+  <!-- ── Accuracy modal (Phase 2) ──────────────────────────────────── -->
+  <div id="accuracy-modal" class="hidden" role="dialog" aria-modal="true">
+    <div class="accuracy-content">
+      <div id="acc-emoji" class="acc-emoji">🎉</div>
+      <h2 id="acc-title" class="acc-title">Great job!</h2>
+      <div id="acc-pct" class="acc-pct">0%</div>
+      <p id="acc-score" class="acc-score">You got 0 out of 0 beats!</p>
+      <div class="acc-breakdown">
+        <span id="acc-green"></span>
+        <span id="acc-yellow"></span>
+        <span id="acc-red"></span>
+      </div>
+      <button id="acc-close" class="big-btn acc-close-btn">Try Again! 🥁</button>
+    </div>
+  </div>
+
   <!-- ── Toast notifications ────────────────────────────────────────── -->
   <div id="toast" class="hidden" role="status" aria-live="polite"></div>
 
@@ -124,6 +164,7 @@
   <script src="js/patterns.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/rewards.js"></script>
+  <script src="js/phase2.js"></script>
   <script src="js/app.js"></script>
 
 </body>
