@@ -1,5 +1,3 @@
-# Deploy Drum Hero Jr. to GitHub Pages
-# Trigger: every push to main
 name: Deploy to GitHub Pages
 
 on:
@@ -12,7 +10,6 @@ permissions:
   pages: write
   id-token: write
 
-# Only one deployment at a time
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -33,7 +30,6 @@ jobs:
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repo root (index.html + css/ + js/)
           path: '.'
 
       - name: Deploy to GitHub Pages
