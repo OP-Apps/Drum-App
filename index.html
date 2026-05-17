@@ -14,8 +14,12 @@
       <h1 class="app-title">🥁 Drum Hero Jr.</h1>
       <p class="app-tagline">by OPapps — Learn to play drums, one beat at a time!</p>
     </div>
-    <div class="star-counter">
-      ⭐ <span id="total-stars">0</span>
+    <div class="header-right">
+      <div class="session-timer" id="session-timer">⏱ 0:00</div>
+      <div class="streak-display" id="streak-display">🔥 1 day streak</div>
+      <div class="star-counter">
+        ⭐ <span id="total-stars">0</span>
+      </div>
     </div>
   </header>
 
@@ -34,6 +38,9 @@
           <button class="level-btn" data-level="3">⭐⭐⭐ Lvl 3</button>
           <button class="level-btn" data-level="4">Lvl 4</button>
           <button class="level-btn" data-level="5">Lvl 5 🔥</button>
+        </div>
+        <div class="genre-filters" id="genre-filters">
+          <!-- Genre filter chips injected by app.js -->
         </div>
       </div>
 
@@ -65,7 +72,7 @@
       </div>
 
       <!-- Drum grid -->
-      <div class="grid-wrapper">
+      <div class="grid-wrapper" id="grid-wrapper">
         <!--
           Grid is built dynamically by renderDrumGrid() in app.js.
           Rows = instruments (crash → kick, top to bottom).
@@ -73,6 +80,8 @@
           Beat 1 = col 0, Beat 2 = col 4, Beat 3 = col 8, Beat 4 = col 12.
         -->
         <div id="drum-grid"></div>
+        <!-- Focus mode restore hint -->
+        <div class="focus-restore-hint" id="focus-restore-hint">⟨ expand</div>
       </div>
 
       <!-- Transport + BPM controls -->
@@ -86,8 +95,8 @@
           <input
             type="range"
             id="bpm-slider"
-            min="40"
-            max="160"
+            min="60"
+            max="180"
             value="80"
             aria-label="Tempo in BPM"
           >
@@ -96,10 +105,19 @@
 
         <!-- Transport buttons -->
         <div class="transport-row">
-          <button id="play-btn"     class="big-btn">▶ PLAY!</button>
-          <button id="loop-btn"     class="big-btn active">↺ Loop: ON</button>
-          <button id="practice-btn" class="big-btn">🐢 Practice Mode</button>
-          <button id="phase2-btn"   class="big-btn phase2-btn">🎤 Play Along!</button>
+          <button id="practice-btn" class="big-btn btn-practice">🐢 Practice</button>
+          <button id="listen-btn"   class="big-btn btn-listen">▶ Listen</button>
+          <button id="mic-toggle-btn" class="icon-btn" title="Toggle mic / Play Along">🎤</button>
+        </div>
+
+        <!-- Extra controls: Kit Sounds + Drums Out toggles -->
+        <div class="extra-controls">
+          <button id="kit-sounds-btn" class="toggle-btn active" title="Mute/unmute all drum sounds">
+            🥁 Kit Sounds
+          </button>
+          <button id="drums-out-btn" class="toggle-btn" title="Remove drums from mix (play along mode)">
+            🎸 Drums Out
+          </button>
         </div>
 
         <!-- Phase 2 mic panel (hidden until mic is active) -->
